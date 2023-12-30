@@ -4,14 +4,14 @@ ReallocatedSectorCt=$(smartctl -a -j $1 | jq '.ata_smart_attributes.table[] | se
 
 if [[ "$ReallocatedSectorCt" -ne "0" ]]
 then
-  return 1
+  exit 1
 fi
 
 Current_Pending_Sector=$(smartctl -a -j $1 | jq '.ata_smart_attributes.table[] | select(.name == "Current_Pending_Sector") | .raw.value')
 
 if [[ "$Current_Pending_Sector" -ne 0 ]]
 then
-  return 2
+  exit 2
 fi
 
-return 0
+exit 0
