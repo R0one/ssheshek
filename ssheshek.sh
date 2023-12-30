@@ -1,8 +1,10 @@
 #!/bin/bash
 
+SMARTCTL_COMMAND="${SMARTCTL_COMMAND:-smartctl}"
+
 set -o pipefail
 
-ReallocatedSectorCt=$(smartctl -a -j $1 | jq '.ata_smart_attributes.table[] | select(.name=="Reallocated_Sector_Ct") | .raw.value')
+ReallocatedSectorCt=$($SMARTCTL_COMMAND -a -j $1 | jq '.ata_smart_attributes.table[] | select(.name=="Reallocated_Sector_Ct") | .raw.value')
 
 if (( $? > 0 )) ; then exit 1 ; fi
 
@@ -11,7 +13,7 @@ then
   exit 2
 fi
 
-Current_Pending_Sector=$(smartctl -a -j $1 | jq '.ata_smart_attributes.table[] | select(.name == "Current_Pending_Sector") | .raw.value')
+Current_Pending_Sector=$($SMARTCTL_COMMAND -a -j $1 | jq '.ata_smart_attributes.table[] | select(.name == "Current_Pending_Sector") | .raw.value')
 
 if (( $? > 0 )) ; then exit 1 ; fi
 
