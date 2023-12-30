@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -o pipefail
+
 ReallocatedSectorCt=$(smartctl -a -j $1 | jq '.ata_smart_attributes.table[] | select(.name=="Reallocated_Sector_Ct") | .raw.value')
 
 if (( $? > 0 )) ; then exit 1 ; fi
